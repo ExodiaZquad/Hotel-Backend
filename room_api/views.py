@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Room, RoomType
@@ -12,13 +13,12 @@ class RoomDetailView(APIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     def get(self, request, *args, **kwargs):
-    #    print(request.headers['Key'])
        pk = self.kwargs['pk']
-       room = Room.objects.filter(id=pk)
-       if(room.exists() == False):
-           return Response(status=404)
-       serializer = RoomSerializer(room, many=True)
-       return Response({"room": serializer.data})
+       room = Room.objects.filter(id=pk).first()
+       if(room is None):
+           return Response({"message": "Page Not Found!"}, status=404)
+       serializer = RoomSerializer(room)
+       return Response(serializer.data)
 
     def delete(self, request, pk):
         room = generics.get_object_or_404(Room.objects.all(), pk=pk)
