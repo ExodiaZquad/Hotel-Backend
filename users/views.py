@@ -23,11 +23,8 @@ class LogoutView(APIView):
         pass
 
 class UserDetailView(APIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
     def get(self, request, *args, **kwargs):
         if('token' not in request.headers.keys()):
-            # return Response({"message": "do not found token in the header"}, status=404)
             raise AuthenticationFailed('Unauthenticated!')
         token = request.headers['token']
         try:
@@ -36,4 +33,5 @@ class UserDetailView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
         user = User.objects.filter(id=payload['user_id']).first()
         serializer = UserSerializer(user)
+        #note-to-self: maybe make this more secure (sending only user_id?)
         return Response(serializer.data, status=200)
