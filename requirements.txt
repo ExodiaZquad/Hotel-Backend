@@ -5,6 +5,10 @@ virtualenv venv
 #activate virtual environment
 venv\scripts\activate
 #install dependencies
-pip install django djangorestframework django-cors-headers djangorestframework_simplejwt
+pip install django djangorestframework django-cors-headers djangorestframework_simplejwt djongo
+#using mongoDB as database 
+#create db name hoteldb and collection name hoteldbCollection
+py manage.py makemigrations
+py manage.py migrate
 #runserver
 python manage.py runserver
