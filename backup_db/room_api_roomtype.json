@@ -1,0 +1,49 @@
+[{
+  "_id": {
+    "$oid": "61866f5d11d54bf50bcbb32d"
+  },
+  "id": 1,
+  "type": "a",
+  "max_price": 10000,
+  "min_price": 5000,
+  "type_name": "Century House A",
+  "room_free": 13,
+  "rating": 4.8,
+  "pic": "https://www.dicpic.com"
+},{
+  "_id": {
+    "$oid": "61866f7111d54bf50bcbb32e"
+  },
+  "id": 2,
+  "type": "b",
+  "max_price": 5000,
+  "min_price": 3000,
+  "type_name": "Century House B",
+  "room_free": 10,
+  "rating": 4.6,
+  "pic": "https://www.dicpic.com"
+},{
+  "_id": {
+    "$oid": "61866f9a11d54bf50bcbb32f"
+  },
+  "id": 3,
+  "type": "c",
+  "max_price": 4500,
+  "min_price": 2000,
+  "type_name": "Supalai A",
+  "room_free": 9,
+  "rating": 4.7,
+  "pic": "https://www.dicpic.com"
+},{
+  "_id": {
+    "$oid": "61866fb311d54bf50bcbb330"
+  },
+  "id": 4,
+  "type": "d",
+  "max_price": 1500,
+  "min_price": 4000,
+  "type_name": "Supalai B",
+  "room_free": 11,
+  "rating": 4.4,
+  "pic": "https://www.dicpic.com"
+}]

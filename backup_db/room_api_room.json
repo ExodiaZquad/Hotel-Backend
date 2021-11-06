@@ -1,0 +1,261 @@
+[{
+  "_id": {
+    "$oid": "618670bc11d54bf50bcbb331"
+  },
+  "id": 1,
+  "room_type_id": 1,
+  "room_num": 1,
+  "price": 8000,
+  "person_per_room": "7-10",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618670c811d54bf50bcbb332"
+  },
+  "id": 2,
+  "room_type_id": 1,
+  "room_num": 2,
+  "price": 7500,
+  "person_per_room": "7-8",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618670d111d54bf50bcbb333"
+  },
+  "id": 3,
+  "room_type_id": 1,
+  "room_num": 3,
+  "price": 9000,
+  "person_per_room": "9-12",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618670da11d54bf50bcbb334"
+  },
+  "id": 4,
+  "room_type_id": 1,
+  "room_num": 4,
+  "price": 6000,
+  "person_per_room": "5-8",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618670df11d54bf50bcbb335"
+  },
+  "id": 5,
+  "room_type_id": 1,
+  "room_num": 5,
+  "price": 7000,
+  "person_per_room": "5-9",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186713211d54bf50bcbb336"
+  },
+  "id": 6,
+  "room_type_id": 1,
+  "room_num": 6,
+  "price": 8600,
+  "person_per_room": "8-10",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186713e11d54bf50bcbb337"
+  },
+  "id": 7,
+  "room_type_id": 1,
+  "room_num": 7,
+  "price": 9000,
+  "person_per_room": "10-12",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186715f11d54bf50bcbb338"
+  },
+  "id": 8,
+  "room_type_id": 1,
+  "room_num": 8,
+  "price": 10000,
+  "person_per_room": "10-13",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186716c11d54bf50bcbb339"
+  },
+  "id": 9,
+  "room_type_id": 1,
+  "room_num": 9,
+  "price": 5000,
+  "person_per_room": "5-6",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186717c11d54bf50bcbb33a"
+  },
+  "id": 10,
+  "room_type_id": 1,
+  "room_num": 10,
+  "price": 7500,
+  "person_per_room": "7-8",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618671d511d54bf50bcbb33b"
+  },
+  "id": 11,
+  "room_type_id": 2,
+  "room_num": 1,
+  "price": 3000,
+  "person_per_room": "3-4",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618671e911d54bf50bcbb33c"
+  },
+  "id": 12,
+  "room_type_id": 2,
+  "room_num": 2,
+  "price": 3500,
+  "person_per_room": "3-5",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "618671f611d54bf50bcbb33d"
+  },
+  "id": 13,
+  "room_type_id": 2,
+  "room_num": 3,
+  "price": 4000,
+  "person_per_room": "4-5",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186721411d54bf50bcbb33e"
+  },
+  "id": 14,
+  "room_type_id": 2,
+  "room_num": 4,
+  "price": 4500,
+  "person_per_room": "5-6",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186722811d54bf50bcbb33f"
+  },
+  "id": 15,
+  "room_type_id": 2,
+  "room_num": 5,
+  "price": 5000,
+  "person_per_room": "5-7",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186723511d54bf50bcbb340"
+  },
+  "id": 16,
+  "room_type_id": 2,
+  "room_num": 6,
+  "price": 4200,
+  "person_per_room": "4-5",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186723e11d54bf50bcbb341"
+  },
+  "id": 17,
+  "room_type_id": 2,
+  "room_num": 7,
+  "price": 3600,
+  "person_per_room": "3-5",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186724711d54bf50bcbb342"
+  },
+  "id": 18,
+  "room_type_id": 2,
+  "room_num": 8,
+  "price": 4600,
+  "person_per_room": "4-7",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186725311d54bf50bcbb343"
+  },
+  "id": 19,
+  "room_type_id": 2,
+  "room_num": 9,
+  "price": 3800,
+  "person_per_room": "3-6",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+},{
+  "_id": {
+    "$oid": "6186725e11d54bf50bcbb344"
+  },
+  "id": 20,
+  "room_type_id": 2,
+  "room_num": 10,
+  "price": 5000,
+  "person_per_room": "5-7",
+  "detail": "samples detail",
+  "pic": "https://www.dicpic.com",
+  "isFree": true,
+  "exp_date": null
+}]

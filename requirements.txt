@@ -1,0 +1,10 @@
+#install virtualenv
+pip install virtualenv
+#create virtual environment
+virtualenv venv
+#activate virtual environment
+venv\scripts\activate
+#install dependencies
+pip install django djangorestframework django-cors-headers djangorestframework_simplejwt
+#runserver
+python manage.py runserver
