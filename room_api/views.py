@@ -40,9 +40,29 @@ class RoomDetailView(APIView):
         room.delete()
         return Response({"message": f"Room with {pk} has been removed"}, status=204)
 
-class RoomTypeView(generics.ListCreateAPIView):
-    queryset = RoomType.objects.all()
-    serializer_class = RoomTypeSerializer
+class RoomTypeView(APIView):
+    # queryset = RoomType.objects.all()
+    # serializer_class = RoomTypeSerializer
+    def get(self,request, *args, **kwargs):
+        roomTypes = RoomType.objects.all()
+        serializer = RoomTypeSerializer(roomTypes, many=True)
+        return Response(data=serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        roomType = RoomType.objects.get(pk=self.kwargs['pk'])
+        serializer = RoomTypeSerializer(roomType, data=request.data)
+        print(roomType.type_name)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def post(self, request, *args, **kwargs):
+        serializer = RoomTypeSerializer(data=request.data)
+        if(serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 class RoomSortView(APIView):
     def get(self, request, *args, **kwargs):

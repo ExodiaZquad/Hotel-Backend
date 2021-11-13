@@ -1,5 +1,5 @@
 from rest_framework import routers, urlpatterns
-from .views import RoomListView, RoomDetailView, RoomTypeView, RoomSortView
+from .views import RoomListView, RoomDetailView, RoomTypeView, RoomSortView 
 from django.urls import path
 
 app_name = 'room_api'
