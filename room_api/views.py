@@ -54,4 +54,4 @@ class RoomSortView(APIView):
         serializer = RoomSerializer(rooms, many=True)
         arr = [x for x in serializer.data]
         bubbleSort(arr, method=key)
-        return Response({"res": arr})
+        return Response(data=arr)
