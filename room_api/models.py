@@ -11,6 +11,7 @@ class RoomType(models.Model):
 
 class Room(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
+    room_name = models.CharField(max_length=50)
     room_num = models.IntegerField()
     price = models.IntegerField()
     # person_per_room = models.CharField(max_length=10)

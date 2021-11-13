@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from .models import Room, RoomType
 from .serializers import RoomSerializer, RoomTypeSerializer
 
+#implementing Tree
+
+
 #implementing sorting algorithm
 def bubbleSort(arr, **kwargs):
     method = kwargs['method']
@@ -46,15 +49,9 @@ class RoomSortView(APIView):
         key = request.headers['key']
         valid_keys = ['room_num', 'price', 'minPerson', 'isFree']
         if(key not in valid_keys):
-            return Response(status=400)
+            return Response({"message": "wrong key"}, status=400)
         rooms = Room.objects.all()
         serializer = RoomSerializer(rooms, many=True)
         arr = [x for x in serializer.data]
-        for i in range(len(arr)):
-            print(arr[i][key], end=', ')
-        print('')
         bubbleSort(arr, method=key)
-        for i in range(len(arr)):
-            print(arr[i][key], end=', ')
-        print('')
-        return Response({'message': 'successfully sorted'})
+        return Response({"res": arr})
