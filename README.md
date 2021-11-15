@@ -47,12 +47,21 @@ py manage.py runserver
 ## API
 
 * `api/room/` listing the rooms and creating room
+
 ⋅⋅⋅Methods allowed : GET, POST
+
 * `api/room/<int:pk>/` get the specified id room, update and delete
+
 ⋅⋅⋅Methods allowed : GET, PUT, DELETE
+
 * `api/roomtype/` listing the room typesand create
+
 ⋅⋅⋅Methods allowed : GET, PUT, POST
+
 * `api/roomtype/<int:pk>` update the specified room type
+
 ⋅⋅⋅Methods allowed : PUT
+
 * `api/room/sort/` listing all the room after sorted in the specified method
+
 ⋅⋅⋅Methods allowed : GET
