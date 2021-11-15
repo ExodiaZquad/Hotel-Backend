@@ -1,6 +1,6 @@
 # Hotel-Backend
 
-backend for Hotel web application. developed using django-rest-framework for Data structure and algorithms project
+Backend for Hotel web application. Developed using django-rest-framework for Data Structure and Algorithms project.
 
 ## Quickstart
 
