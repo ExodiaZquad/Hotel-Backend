@@ -64,7 +64,9 @@ class RoomDetailView(APIView):
                 'type_name': roomtype.type_name,
                 'room_free': room_free,
                 'rating': roomtype.rating,
-                'pic': roomtype.pic
+                'pic1': roomtype.pic1,
+                'pic2': roomtype.pic2,
+                'pic3': roomtype.pic3
             })
             serializer.save()
             if(roomTypeSerializer.is_valid()):
@@ -90,6 +92,7 @@ class RoomTypeView(APIView):
             pk = room['room_type']
             if(room['isFree'] == True):
                 lst[pk-1] += 1
+        print(lst)
         updateRoomType(RoomType.objects.get(pk=1), lst[0])
         updateRoomType(RoomType.objects.get(pk=2), lst[1])
         updateRoomType(RoomType.objects.get(pk=3), lst[2])
@@ -134,7 +137,9 @@ def updateRoomType(roomType, room_free):
         'type_name': roomType.type_name,
         'room_free': room_free,
         'rating': roomType.rating,
-        'pic': roomType.pic
+        'pic1': roomType.pic1,
+        'pic2': roomType.pic2,
+        'pic3': roomType.pic3
     })
     if(serializer.is_valid(raise_exception=True)):
        serializer.save()

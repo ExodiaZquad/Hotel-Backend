@@ -1,49 +1,57 @@
 [{
   "_id": {
-    "$oid": "61866f5d11d54bf50bcbb32d"
+    "$oid": "61925a4b16851ae633ddabe9"
   },
   "id": 1,
-  "type": "a",
+  "type": "A",
   "max_price": 10000,
-  "min_price": 5000,
-  "type_name": "Century House A",
-  "room_free": 13,
-  "rating": 4.8,
-  "pic": "https://www.dicpic.com"
+  "min_price": 7000,
+  "type_name": "Room A",
+  "room_free": 20,
+  "rating": 4.6,
+  "pic1": "https://www.picture.com",
+  "pic2": "https://www.picture.com",
+  "pic3": "https://www.picture.com"
 },{
   "_id": {
-    "$oid": "61866f7111d54bf50bcbb32e"
+    "$oid": "61925a5616851ae633ddabea"
   },
   "id": 2,
-  "type": "b",
-  "max_price": 5000,
+  "type": "B",
+  "max_price": 6000,
   "min_price": 3000,
-  "type_name": "Century House B",
-  "room_free": 10,
-  "rating": 4.6,
-  "pic": "https://www.dicpic.com"
+  "type_name": "Room B",
+  "room_free": 20,
+  "rating": 4.5,
+  "pic1": "https://www.picture.com",
+  "pic2": "https://www.picture.com",
+  "pic3": "https://www.picture.com"
 },{
   "_id": {
-    "$oid": "61866f9a11d54bf50bcbb32f"
+    "$oid": "61925a6416851ae633ddabeb"
   },
   "id": 3,
-  "type": "c",
-  "max_price": 4500,
-  "min_price": 2000,
-  "type_name": "Supalai A",
-  "room_free": 9,
-  "rating": 4.7,
-  "pic": "https://www.dicpic.com"
+  "type": "C",
+  "max_price": 25000,
+  "min_price": 20000,
+  "type_name": "House A",
+  "room_free": 10,
+  "rating": 4.8,
+  "pic1": "https://www.picture.com",
+  "pic2": "https://www.picture.com",
+  "pic3": "https://www.picture.com"
 },{
   "_id": {
-    "$oid": "61866fb311d54bf50bcbb330"
+    "$oid": "61925a7116851ae633ddabec"
   },
   "id": 4,
-  "type": "d",
-  "max_price": 1500,
-  "min_price": 4000,
-  "type_name": "Supalai B",
-  "room_free": 11,
-  "rating": 4.4,
-  "pic": "https://www.dicpic.com"
+  "type": "D",
+  "max_price": 19000,
+  "min_price": 12000,
+  "type_name": "House B",
+  "room_free": 10,
+  "rating": 4.7,
+  "pic1": "https://www.picture.com",
+  "pic2": "https://www.picture.com",
+  "pic3": "https://www.picture.com"
 }]

@@ -7,7 +7,9 @@ class RoomType(models.Model):
     type_name = models.CharField(max_length=20)
     room_free = models.IntegerField()
     rating = models.FloatField()
-    pic = models.URLField()
+    pic1 = models.URLField()
+    pic2 = models.URLField()
+    pic3 = models.URLField()
 
 class Room(models.Model):
     # room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
