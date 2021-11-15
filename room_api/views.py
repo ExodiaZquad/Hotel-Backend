@@ -20,10 +20,21 @@ def bubbleSort(arr, **kwargs):
             elif(arr[i][method] > arr[j][method]):
                 arr[i], arr[j] = arr[j], arr[i]
 
-class RoomListView(generics.ListCreateAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
+# api/room
+class RoomListView(APIView):
+    def get(self, request, *args, **kwargs):
+        rooms = Room.objects.all()
+        serializer = RoomSerializer(rooms, many=True)
+        return Response(data=serializer.data)
 
+    def post(self, request, *args, **kwargs):
+        serializer = RoomSerializer(data=request.data)
+        if(serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+# api/room/<int:pk>
 class RoomDetailView(APIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
@@ -40,7 +51,7 @@ class RoomDetailView(APIView):
         room = Room.objects.get(pk=pk)
         serializer = RoomSerializer(room, data=request.data)
         if(serializer.is_valid()):
-            roomtype = RoomType.objects.get(pk=room.id)
+            roomtype = RoomType.objects.get(pk=room.room_type)
             room_free = roomtype.room_free
             if(room.isFree and request.data['isFree'] == False):
                 room_free = roomtype.room_free - 1
@@ -67,11 +78,22 @@ class RoomDetailView(APIView):
         room.delete()
         return Response({"message": f"Room with {pk} has been removed"}, status=204)
 
+# api/roomtype/
 class RoomTypeView(APIView):
-    # queryset = RoomType.objects.all()
-    # serializer_class = RoomTypeSerializer
     def get(self,request, *args, **kwargs):
         roomTypes = RoomType.objects.all()
+        roomsQueryset = Room.objects.all()
+        roomSerializer = RoomSerializer(roomsQueryset, many=True)
+        rooms = [x for x in roomSerializer.data]
+        lst = [0, 0, 0, 0]
+        for room in rooms:
+            pk = room['room_type']
+            if(room['isFree'] == True):
+                lst[pk-1] += 1
+        updateRoomType(RoomType.objects.get(pk=1), lst[0])
+        updateRoomType(RoomType.objects.get(pk=2), lst[1])
+        updateRoomType(RoomType.objects.get(pk=3), lst[2])
+        updateRoomType(RoomType.objects.get(pk=4), lst[3])
         serializer = RoomTypeSerializer(roomTypes, many=True)
         return Response(data=serializer.data)
 
@@ -91,6 +113,7 @@ class RoomTypeView(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
+# api/room/sort/
 class RoomSortView(APIView):
     def get(self, request, *args, **kwargs):
         key = request.headers['key']
@@ -102,3 +125,16 @@ class RoomSortView(APIView):
         arr = [x for x in serializer.data]
         bubbleSort(arr, method=key)
         return Response(data=arr)
+
+def updateRoomType(roomType, room_free):
+    serializer = RoomTypeSerializer(roomType, data={
+        'type': roomType.type,
+        'max_price': roomType.max_price,
+        'min_price': roomType.min_price,
+        'type_name': roomType.type_name,
+        'room_free': room_free,
+        'rating': roomType.rating,
+        'pic': roomType.pic
+    })
+    if(serializer.is_valid(raise_exception=True)):
+       serializer.save()
