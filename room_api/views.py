@@ -4,6 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Room, RoomType
 from .serializers import RoomSerializer, RoomTypeSerializer
+from users.serializers import UserSerializer
+from users.models import User
+from core.settings import SECRET_KEY
+import jwt
 
 #implementing Tree
 
@@ -23,6 +27,16 @@ def bubbleSort(arr, **kwargs):
 # api/room
 class RoomListView(APIView):
     def get(self, request, *args, **kwargs):
+        #check for authentication key
+        if('token' not in request.headers.keys()):
+            raise AuthenticationFailed('Unauthenticated!')
+        token = request.headers['token']
+        try:
+            payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
+        user = User.objects.filter(id=payload['user_id']).first()
+
         rooms = Room.objects.all()
         serializer = RoomSerializer(rooms, many=True)
         return Response(data=serializer.data)
@@ -39,14 +53,34 @@ class RoomDetailView(APIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     def get(self, request, *args, **kwargs):
-       pk = self.kwargs['pk']
-       room = Room.objects.filter(id=pk).first()
-       if(room is None):
-           return Response({"message": "Page Not Found!"}, status=404)
-       serializer = RoomSerializer(room)
-       return Response(serializer.data)
+        #check for authentication key
+        if('token' not in request.headers.keys()):
+            raise AuthenticationFailed('Unauthenticated!')
+        token = request.headers['token']
+        try:
+            payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
+        user = User.objects.filter(id=payload['user_id']).first()
+
+        pk = self.kwargs['pk']
+        room = Room.objects.filter(id=pk).first()
+        if(room is None):
+            return Response({"message": "Page Not Found!"}, status=404)
+        serializer = RoomSerializer(room)
+        return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
+        #check for authentication key
+        if('token' not in request.headers.keys()):
+            raise AuthenticationFailed('Unauthenticated!')
+        token = request.headers['token']
+        try:
+            payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
+        user = User.objects.filter(id=payload['user_id']).first()
+
         pk = self.kwargs['pk']
         room = Room.objects.get(pk=pk)
         serializer = RoomSerializer(room, data=request.data)
@@ -57,20 +91,21 @@ class RoomDetailView(APIView):
                 room_free = roomtype.room_free - 1
             elif(room.isFree == False and request.data['isFree'] == True):
                 room_free = roomtype.room_free + 1
-            roomTypeSerializer = RoomTypeSerializer(roomtype, data={
-                'type': roomtype.type,
-                'max_price': roomtype.max_price,
-                'min_price': roomtype.min_price,
-                'type_name': roomtype.type_name,
-                'room_free': room_free,
-                'rating': roomtype.rating,
-                'pic1': roomtype.pic1,
-                'pic2': roomtype.pic2,
-                'pic3': roomtype.pic3
-            })
+            updateRoomType(roomtype, room_free)
+            # roomTypeSerializer = RoomTypeSerializer(roomtype, data={
+            #     'type': roomtype.type,
+            #     'max_price': roomtype.max_price,
+            #     'min_price': roomtype.min_price,
+            #     'type_name': roomtype.type_name,
+            #     'room_free': room_free,
+            #     'rating': roomtype.rating,
+            #     'pic1': roomtype.pic1,
+            #     'pic2': roomtype.pic2,
+            #     'pic3': roomtype.pic3
+            # })
             serializer.save()
-            if(roomTypeSerializer.is_valid()):
-                roomTypeSerializer.save()
+            # if(roomTypeSerializer.is_valid()):
+            #     roomTypeSerializer.save()
             print(roomtype.room_free)
             return Response(serializer.data) 
         return Response(serializer.errors, status=400)
