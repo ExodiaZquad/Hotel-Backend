@@ -13,7 +13,7 @@ ALLOWED_HOSTS = ['*']
 SECRET_KEY = "$55m0aqdsu1x6-i+8_#1((r*$%zuy@jo44jcyy#4(ns+j-"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['hotel-backend-api.herokuapp.com', '127.0.0.1']
 
@@ -82,9 +82,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'hoteldb',
+        'NAME': 'hotel-database',
+        'HOST': 'hotel-database.vqh4k.mongodb.net',
+        'PORT': 27017,
+        'USER': 'admin',
+        'PASSWORD': 'c9PQYK9wkGSdM7vf'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "djongo",
+#         "NAME": "hoteldb"
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -120,18 +120,18 @@ class RoomTypeView(APIView):
     def get(self,request, *args, **kwargs):
         roomTypes = RoomType.objects.all()
         roomsQueryset = Room.objects.all()
-        roomSerializer = RoomSerializer(roomsQueryset, many=True)
-        rooms = [x for x in roomSerializer.data]
-        lst = [0, 0, 0, 0]
-        for room in rooms:
-            pk = room['room_type']
-            if(room['isFree'] == True):
-                lst[pk-1] += 1
-        print(lst)
-        updateRoomType(RoomType.objects.get(pk=1), lst[0])
-        updateRoomType(RoomType.objects.get(pk=2), lst[1])
-        updateRoomType(RoomType.objects.get(pk=3), lst[2])
-        updateRoomType(RoomType.objects.get(pk=4), lst[3])
+        # roomSerializer = RoomSerializer(roomsQueryset, many=True)
+        # rooms = [x for x in roomSerializer.data]
+        # lst = [0, 0, 0, 0]
+        # for room in rooms:
+        #     pk = room['room_type']
+        #     if(room['isFree'] == True):
+        #         lst[pk-1] += 1
+        # print(lst)
+        # updateRoomType(RoomType.objects.get(pk=1), lst[0])
+        # updateRoomType(RoomType.objects.get(pk=2), lst[1])
+        # updateRoomType(RoomType.objects.get(pk=3), lst[2])
+        # updateRoomType(RoomType.objects.get(pk=4), lst[3])
         serializer = RoomTypeSerializer(roomTypes, many=True)
         return Response(data=serializer.data)
 
@@ -146,6 +146,7 @@ class RoomTypeView(APIView):
 
     def post(self, request, *args, **kwargs):
         serializer = RoomTypeSerializer(data=request.data)
+        print(request.data)
         if(serializer.is_valid(raise_exception=True)):
             serializer.save()
             return Response(serializer.data, status=201)
