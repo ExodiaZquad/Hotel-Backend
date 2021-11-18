@@ -82,11 +82,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'hotel-database',
-        'HOST': 'hotel-database.vqh4k.mongodb.net',
-        'PORT': 27017,
-        'USER': 'admin',
-        'PASSWORD': 'c9PQYK9wkGSdM7vf'
+        'CLIENT': {
+            'name': 'hotel-database',
+            'host': 'mongodb+srv://admin:c9PQYK9wkGSdM7vf@hotel-database.vqh4k.mongodb.net/hotel-database?retryWrites=true&w=majority',
+            'username': 'admin',
+            'password': 'c9PQYK9wkGSdM7vf',
+            "authMechanism": "SCRAM-SHA-1",
+        }
     }
 }
 
