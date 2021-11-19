@@ -24,6 +24,14 @@ def bubbleSort(arr, **kwargs):
             elif(arr[i][method] > arr[j][method]):
                 arr[i], arr[j] = arr[j], arr[i]
 
+def findRoomByRoomType(roomType):
+    rooms = Room.objects.all()
+    ret = []
+    for room in rooms:
+        if(room.room_type == roomType):
+            ret.append(room)
+    return ret
+
 # api/room
 class RoomListView(APIView):
     def get(self, request, *args, **kwargs):
@@ -37,8 +45,15 @@ class RoomListView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
         user = User.objects.filter(id=payload['user_id']).first()
 
+        #return room with room_type specified
+        if('type' not in request.headers.keys()):
+            return Response(status=400)
         rooms = Room.objects.all()
-        serializer = RoomSerializer(rooms, many=True)
+
+        room_type = request.headers['type']
+        ret = findRoomByRoomType(int(room_type))
+
+        serializer = RoomSerializer(ret, many=True)
         return Response(data=serializer.data)
 
     def post(self, request, *args, **kwargs):
