@@ -92,20 +92,7 @@ class RoomDetailView(APIView):
             elif(room.isFree == False and request.data['isFree'] == True):
                 room_free = roomtype.room_free + 1
             updateRoomType(roomtype, room_free)
-            # roomTypeSerializer = RoomTypeSerializer(roomtype, data={
-            #     'type': roomtype.type,
-            #     'max_price': roomtype.max_price,
-            #     'min_price': roomtype.min_price,
-            #     'type_name': roomtype.type_name,
-            #     'room_free': room_free,
-            #     'rating': roomtype.rating,
-            #     'pic1': roomtype.pic1,
-            #     'pic2': roomtype.pic2,
-            #     'pic3': roomtype.pic3
-            # })
             serializer.save()
-            # if(roomTypeSerializer.is_valid()):
-            #     roomTypeSerializer.save()
             print(roomtype.room_free)
             return Response(serializer.data) 
         return Response(serializer.errors, status=400)
@@ -156,7 +143,7 @@ class RoomTypeView(APIView):
 class RoomSortView(APIView):
     def get(self, request, *args, **kwargs):
         key = request.headers['key']
-        valid_keys = ['room_num', 'price', 'minPerson', 'isFree']
+        valid_keys = ['room_num', 'price', 'min_person', 'isFree']
         if(key not in valid_keys):
             return Response({"message": "wrong key"}, status=400)
         rooms = Room.objects.all()
