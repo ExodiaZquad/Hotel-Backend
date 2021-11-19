@@ -161,8 +161,15 @@ class RoomSortView(APIView):
         valid_keys = ['room_num', 'price', 'min_person', 'isFree']
         if(key not in valid_keys):
             return Response({"message": "wrong key"}, status=400)
-        rooms = Room.objects.all()
-        serializer = RoomSerializer(rooms, many=True)
+
+        #return room with room_type specified
+        if('type' not in request.headers.keys()):
+            return Response(status=400)
+
+        room_type = request.headers['type']
+        ret = findRoomByRoomType(int(room_type))
+
+        serializer = RoomSerializer(ret, many=True)
         arr = [x for x in serializer.data]
         bubbleSort(arr, method=key)
         return Response(data=arr)
