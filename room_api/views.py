@@ -8,6 +8,7 @@ from users.serializers import UserSerializer
 from users.models import User
 from core.settings import SECRET_KEY
 import jwt
+import random
 
 #implementing Tree
 
@@ -30,6 +31,15 @@ def findRoomByRoomType(roomType):
     for room in rooms:
         if(room.room_type == roomType):
             ret.append(room)
+    return ret
+
+def getThreeRoomFromDifferentType(room):
+    roomType = int(room.room_type)
+    ret = []
+    for i in range(1,5):
+        if(roomType != i):
+            lst = findRoomByRoomType(i)
+            ret.append(lst[random.randint(0, len(lst)-1)])
     return ret
 
 # api/room
@@ -77,12 +87,15 @@ class RoomDetailView(APIView):
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Unauthenticated!')
         user = User.objects.filter(id=payload['user_id']).first()
-
         pk = self.kwargs['pk']
         room = Room.objects.filter(id=pk).first()
+
+        ret = getThreeRoomFromDifferentType(room)
+        ret.insert(0, room)
+
         if(room is None):
             return Response({"message": "Page Not Found!"}, status=404)
-        serializer = RoomSerializer(room)
+        serializer = RoomSerializer(ret, many=True)
         return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
