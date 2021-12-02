@@ -218,5 +218,6 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
     "key",
     "token",
-    "type"
+    "type",
+    "isFree",
 ]

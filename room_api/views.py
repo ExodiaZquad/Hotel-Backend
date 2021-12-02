@@ -25,6 +25,15 @@ def bubbleSort(arr, **kwargs):
             elif(arr[i][method] > arr[j][method]):
                 arr[i], arr[j] = arr[j], arr[i]
 
+#quick sort
+
+
+#insertion sort
+
+
+#selection sort
+
+
 def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
     ret = []
@@ -57,7 +66,7 @@ class RoomListView(APIView):
 
         #return room with room_type specified
         if('type' not in request.headers.keys()):
-            return Response(status=400)
+            return Response({"message": "headers not found"}, status=400)
         rooms = Room.objects.all()
 
         room_type = request.headers['type']
@@ -88,9 +97,11 @@ class RoomDetailView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
         user = User.objects.filter(id=payload['user_id']).first()
         pk = self.kwargs['pk']
+        #maybe implement more searching
         room = Room.objects.filter(id=pk).first()
 
         ret = getThreeRoomFromDifferentType(room)
+        #implement sorting algorithm here before insert the specific room
         ret.insert(0, room)
 
         if(room is None):
@@ -170,19 +181,31 @@ class RoomTypeView(APIView):
 # api/room/sort/
 class RoomSortView(APIView):
     def get(self, request, *args, **kwargs):
+        if('type' not in request.headers.keys() or 'key' not in request.headers.keys() or 'isFree' not in request.headers.keys()):
+            return Response(status=400)
+
         key = request.headers['key']
         valid_keys = ['room_num', 'price', 'min_person', 'isFree']
         if(key not in valid_keys):
             return Response({"message": "wrong key"}, status=400)
 
+        isFree = request.headers['isFree']
         #return room with room_type specified
-        if('type' not in request.headers.keys()):
-            return Response(status=400)
-
         room_type = request.headers['type']
+        #if key == isFree need to search
         ret = findRoomByRoomType(int(room_type))
 
-        serializer = RoomSerializer(ret, many=True)
+        rooms = []
+        if(isFree == '1'):
+            for room in ret:
+                if(room.isFree == True):
+                    rooms.append(room)
+        else:
+            for room in ret:
+                if(room.isFree == False):
+                    rooms.append(room)
+
+        serializer = RoomSerializer(rooms, many=True)
         arr = [x for x in serializer.data]
         bubbleSort(arr, method=key)
         return Response(data=arr)
