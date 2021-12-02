@@ -16,7 +16,6 @@ import random
 #implementing sorting algorithm
 def bubbleSort(arr, **kwargs):
     method = kwargs['method']
-    print(method)
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
             if(method == "isFree"):
@@ -26,13 +25,74 @@ def bubbleSort(arr, **kwargs):
                 arr[i], arr[j] = arr[j], arr[i]
 
 #quick sort
+def partition(start, end, array):
+    pivot_index = start 
+    pivot = array[pivot_index]["price"]
+    while start < end:
+        while start < len(array) and array[start]["price"] <= pivot:
+            start += 1
+        while array[end]["price"] > pivot:
+            end -= 1
+        if(start < end):
+            array[start], array[end] = array[end], array[start]
+    array[end], array[pivot_index] = array[pivot_index], array[end]
+    return end
+      
+def quickSort(start, end, array):
+    if (start < end):
+        p = partition(start, end, array)
+        quickSort(start, p - 1, array)
+        quickSort(p + 1, end, array)
+          
+def heapify(arr, n, i):
+    largest = i  # Initialize largest as root
+    l = 2 * i + 1     # left = 2*i + 1
+    r = 2 * i + 2     # right = 2*i + 2
+    if l < n and arr[largest]['price'] < arr[l]['price']:
+        largest = l
+    if r < n and arr[largest]['price'] < arr[r]['price']:
+        largest = r
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]  # swap
+        heapify(arr, n, largest)
+
+def heapSort(arr):
+    n = len(arr)
+    for i in range(n//2 - 1, -1, -1):
+        heapify(arr, n, i)
+    for i in range(n-1, 0, -1):
+        arr[i], arr[0] = arr[0], arr[i]  # swap
+        heapify(arr, i, 0)
+
+#insertion sort for sorting by room_num
+def insertionSort(arr):
+    lists = [x for x in arr]
+    sortedList = [lists.pop(0)]
+    while lists:
+        poppy = lists.pop(0)
+        for i in range(len(sortedList) - 1, -1, -1):
+            if poppy['room_num'] > sortedList[i]['room_num']:
+                sortedList.insert(i+1, poppy)
+                break
+            if i == 0:
+                sortedList.insert(0, poppy)
+                break
+    return sortedList
 
 
-#insertion sort
+#selection sort for min_person
+def selectionSort(arr):
+    for i in range(len(arr)):
+        min_idx = i
+        for j in range(i+1, len(arr)):
+            if arr[min_idx]["min_person"] > arr[j]["min_person"]:
+                min_idx = j
+    arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
 
-#selection sort
-
+#binary search
+def binarySearch():
+    pass
 
 def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
@@ -100,12 +160,20 @@ class RoomDetailView(APIView):
         #maybe implement more searching
         room = Room.objects.filter(id=pk).first()
 
-        ret = getThreeRoomFromDifferentType(room)
-        #implement sorting algorithm here before insert the specific room
-        ret.insert(0, room)
-
         if(room is None):
             return Response({"message": "Page Not Found!"}, status=404)
+
+        ret = getThreeRoomFromDifferentType(room)
+
+        #implement bubble sort here to sort the price of the random three room
+        for i in range(len(ret)):
+            for j in range(i+1, len(ret)):
+                if(ret[i].price > ret[j].price):
+                    ret[i], ret[j] = ret[j], ret[i]
+
+        #insert the room to the first index
+        ret.insert(0, room)
+
         serializer = RoomSerializer(ret, many=True)
         return Response(serializer.data)
 
@@ -192,9 +260,9 @@ class RoomSortView(APIView):
         isFree = request.headers['isFree']
         #return room with room_type specified
         room_type = request.headers['type']
-        #if key == isFree need to search
         ret = findRoomByRoomType(int(room_type))
 
+        #if key == isFree need to search
         rooms = []
         if(isFree == '1'):
             for room in ret:
@@ -207,7 +275,18 @@ class RoomSortView(APIView):
 
         serializer = RoomSerializer(rooms, many=True)
         arr = [x for x in serializer.data]
-        bubbleSort(arr, method=key)
+        # print(arr)
+        
+        # using different sorting algorithm for different key
+        if(key == "room_num"):
+            arr = insertionSort(arr)
+        elif(key == "min_person"):
+            selectionSort(arr)
+        elif(key == "price"):
+            bubbleSort(arr, method="price")
+            # heapSort(arr)
+
+        # bubbleSort(arr, method=key)
         return Response(data=arr)
 
 def updateRoomType(roomType, room_free):
