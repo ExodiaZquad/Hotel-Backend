@@ -7,7 +7,7 @@ from .serializers import RoomSerializer, RoomTypeSerializer
 from users.serializers import UserSerializer
 from users.models import User
 from core.settings import SECRET_KEY
-import jwt, random, datetime
+import jwt, random, datetime, pytz
 
 #implementing Tree
 
@@ -89,9 +89,25 @@ def selectionSort(arr):
     arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
 
-#binary search
-def binarySearch():
-    pass
+#binary search using in api/room/<int:pk>/
+def binarySearch(arr, l, r, pk):
+    # Check base case
+    if r >= l:
+        mid = l + (r - l) // 2
+        # If element is present at the middle itself
+        if arr[mid].id == pk:
+            return mid
+        # If element is smaller than mid, then it
+        # can only be present in left subarray
+        elif arr[mid].id > pk:
+            return binarySearch(arr, l, mid-1, pk)
+        # Else the element can only be present
+        # in right subarray
+        else:
+            return binarySearch(arr, mid + 1, r, pk)
+    else:
+        # Element is not present in the array
+        return -1
 
 def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
@@ -156,11 +172,13 @@ class RoomDetailView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
         user = User.objects.filter(id=payload['user_id']).first()
         pk = self.kwargs['pk']
-        #maybe implement more searching
-        room = Room.objects.filter(id=pk).first()
-
-        if(room is None):
-            return Response({"message": "Page Not Found!"}, status=404)
+        #implementing binary search to find the specific room
+        rooms = Room.objects.all()
+        index = binarySearch(rooms, 0, len(rooms)-1, pk)
+        if(index == -1):
+            return Response({"message": "room not found"}, status=404)
+        room = rooms[index]
+        # room = Room.objects.filter(id=pk).first()
 
         ret = getThreeRoomFromDifferentType(room)
 
@@ -320,7 +338,14 @@ class RoomBookView(APIView):
         print(exp_date)
 
         pk = self.kwargs['pk']
-        room = Room.objects.filter(id=pk).first()
+        #implementing binary search to find the specific room
+        rooms = Room.objects.all()
+        index = binarySearch(rooms, 0, len(rooms)-1, pk)
+        if(index == -1):
+            return Response({"message": "room not found"}, status=404)
+        room = rooms[index]
+
+        #change isFree to False, and add exp_date
         serializer = RoomSerializer(room, data={
             "room_type": room.room_type,
             "room_name": room.room_name,
@@ -332,14 +357,14 @@ class RoomBookView(APIView):
             "pic1": room.pic1,
             "pic2": room.pic2,
             "pic3": room.pic3,
-            "isFree": room.isFree,
+            "isFree": False,
             "exp_date": exp_date
         })
         if(serializer.is_valid(raise_exception=True)):
             serializer.save()
             print(serializer.data)
 
-        return Response(serializer.data, status=200)
+        return Response(serializer.data, status=202)
 
 
 # api/room/check/date/
@@ -356,18 +381,34 @@ class RoomCheckDate(APIView):
         user = User.objects.filter(id=payload['user_id']).first()
 
         rooms = Room.objects.all()
-        serializer = RoomSerializer(rooms, many=True)
-        exp_date = serializer.data[0]['exp_date']
-        year = exp_date[0:4]
-        month = exp_date[5:7]
-        date = exp_date[8:10]
-        old_date = datetime.datetime(int(year), int(month), int(date))
-        now = datetime.datetime.now()
-        print(old_date > now)
-        # x = datetime.datetime(2020, 12, 31)
-        # y = datetime.datetime(2021, 1, 1)
+        # serializer = RoomSerializer(rooms, many=True)
+        utc = pytz.UTC
+        for room in rooms:
+            now = datetime.datetime.now().replace(tzinfo=utc)
+            exp_date = room.exp_date
+            if(exp_date):
+                #check if the room is available
+                if(now > exp_date):
+                    #change isFree to True, exp_date to None
+                    serial = RoomSerializer(room, data={
+                        "room_type": room.room_type,
+                        "room_name": room.room_name,
+                        "room_num": room.room_num,
+                        "price": room.price,
+                        "min_person": room.min_person,
+                        "max_person": room.max_person,
+                        "detail": room.detail,
+                        "pic1": room.pic1,
+                        "pic2": room.pic2,
+                        "pic3": room.pic3,
+                        "isFree": True,
+                        "exp_date": None
+                    })
+                    if(serial.is_valid(raise_exception=True)):
+                        serial.save()
+                    print(room.isFree)
 
-        return Response({"old_date": old_date, "now": now},status=200)
+        return Response({"message": "success"}, status=200)
 
 
 def updateRoomType(roomType, room_free):
