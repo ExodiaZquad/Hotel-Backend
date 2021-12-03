@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ParseError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Room, RoomType
@@ -7,8 +7,7 @@ from .serializers import RoomSerializer, RoomTypeSerializer
 from users.serializers import UserSerializer
 from users.models import User
 from core.settings import SECRET_KEY
-import jwt
-import random
+import jwt, random, datetime
 
 #implementing Tree
 
@@ -288,6 +287,88 @@ class RoomSortView(APIView):
 
         # bubbleSort(arr, method=key)
         return Response(data=arr)
+
+# api/room/book/<int:pk>/
+class RoomBookView(APIView):
+    def post(self, request, *args, **kwargs):
+        #check for authentication key
+        if('token' not in request.headers.keys()):
+            raise AuthenticationFailed('Unauthenticated!')
+        token = request.headers['token']
+        try:
+            payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
+        user = User.objects.filter(id=payload['user_id']).first()
+
+        req = request.data
+        print(req)
+        try: 
+            year = req['year']
+        except:
+            raise ParseError({"message": "year not found"})
+        try: 
+            month = req['month']
+        except:
+            raise ParseError({"message": "month not found"})
+        try: 
+            date = req['date']
+        except:
+            raise ParseError({"message": "date not found"})
+
+        exp_date = datetime.datetime(int(year), int(month), int(date))
+        print(exp_date)
+
+        pk = self.kwargs['pk']
+        room = Room.objects.filter(id=pk).first()
+        serializer = RoomSerializer(room, data={
+            "room_type": room.room_type,
+            "room_name": room.room_name,
+            "room_num": room.room_num,
+            "price": room.price,
+            "min_person": room.min_person,
+            "max_person": room.max_person,
+            "detail": room.detail,
+            "pic1": room.pic1,
+            "pic2": room.pic2,
+            "pic3": room.pic3,
+            "isFree": room.isFree,
+            "exp_date": exp_date
+        })
+        if(serializer.is_valid(raise_exception=True)):
+            serializer.save()
+            print(serializer.data)
+
+        return Response(serializer.data, status=200)
+
+
+# api/room/check/date/
+class RoomCheckDate(APIView):
+    def get(self, request, *args, **kwargs):
+        #check for authentication key
+        if('token' not in request.headers.keys()):
+            raise AuthenticationFailed('Unauthenticated!')
+        token = request.headers['token']
+        try:
+            payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
+        user = User.objects.filter(id=payload['user_id']).first()
+
+        rooms = Room.objects.all()
+        serializer = RoomSerializer(rooms, many=True)
+        exp_date = serializer.data[0]['exp_date']
+        year = exp_date[0:4]
+        month = exp_date[5:7]
+        date = exp_date[8:10]
+        old_date = datetime.datetime(int(year), int(month), int(date))
+        now = datetime.datetime.now()
+        print(old_date > now)
+        # x = datetime.datetime(2020, 12, 31)
+        # y = datetime.datetime(2021, 1, 1)
+
+        return Response({"old_date": old_date, "now": now},status=200)
+
 
 def updateRoomType(roomType, room_free):
     serializer = RoomTypeSerializer(roomType, data={

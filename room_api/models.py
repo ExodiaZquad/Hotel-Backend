@@ -25,4 +25,5 @@ class Room(models.Model):
     pic2 = models.URLField()
     pic3 = models.URLField()
     isFree = models.BooleanField(default=True)
-    exp_date = models.DurationField(blank=True, null=True)
+    # exp_date = models.DurationField(blank=True, null=True)
+    exp_date = models.DateTimeField(blank=True, null=True)
