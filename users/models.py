@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.core.validators import int_list_validator
 from django.db import models
 from django.db.models.deletion import PROTECT
 from django.utils import timezone
@@ -74,11 +75,12 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=255, blank=True)
     tel = models.CharField(max_length=10)
     isBanned = models.BooleanField(default=False)
-    room_booked = models.ForeignKey(Room, on_delete=models.PROTECT)
+    # room_booked = models.ForeignKey(Room, on_delete=models.PROTECT)
     pic = models.URLField(default='https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png')
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) # a admin user; non super-user
     admin = models.BooleanField(default=False) # a superuser
+    room_booked = models.CharField(validators=[int_list_validator], max_length=100)
 
     # notice the absence of a "Password field", that is built in.
     objects = UserManager()
