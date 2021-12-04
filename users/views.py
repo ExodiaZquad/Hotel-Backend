@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from users.serializers import UserSerializer
 from .models import User
 from core.settings import SECRET_KEY
+from room_api.models import Room
+from room_api.serializers import RoomSerializer
 import jwt
 
 class RegisterView(APIView):
@@ -33,5 +35,28 @@ class UserDetailView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
         user = User.objects.filter(id=payload['user_id']).first()
         serializer = UserSerializer(user)
-        #note-to-self: maybe make this more secure (sending only user_id?)
-        return Response(serializer.data, status=200)
+        # note-to-self: maybe make this more secure (sending only user_id?)
+        ret = []
+        ret.append(serializer.data)
+
+        room_booked_str = user.room_booked
+        room_booked_lst = strToList(room_booked_str)
+        for room_id in room_booked_lst:
+            room = Room.objects.get(pk=room_id)
+            room_serializer = RoomSerializer(room)
+            ret.append(room_serializer.data)
+
+        return Response(ret, status=200)
+
+def listToStr(lst):
+    s = ''
+    for i in range(len(lst)):
+        s += str(lst[i])
+        if(i != len(lst) - 1):
+            s += ', '
+    return s
+
+def strToList(s):
+    if(len(s) == 0):
+        return [] 
+    return [int(x) for x in s.split(',')]

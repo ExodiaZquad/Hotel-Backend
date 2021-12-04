@@ -320,22 +320,15 @@ class RoomBookView(APIView):
         user = User.objects.filter(id=payload['user_id']).first()
 
         req = request.data
-        print(req)
-        try: 
-            year = req['year']
+        try:
+            from_date_str = req['from']
+            exp_date_str = req['to']
         except:
-            raise ParseError({"message": "year not found"})
-        try: 
-            month = req['month']
-        except:
-            raise ParseError({"message": "month not found"})
-        try: 
-            date = req['date']
-        except:
-            raise ParseError({"message": "date not found"})
+            raise ParseError({"message": "input not accepted"})
+        # print(datetime.datetime.fromisoformat(from_date), datetime.datetime.fromisoformat(exp_date))
 
-        exp_date = datetime.datetime(int(year), int(month), int(date))
-        print(exp_date)
+        from_date = datetime.datetime.fromisoformat(from_date_str)
+        exp_date = datetime.datetime.fromisoformat(exp_date_str)
 
         pk = self.kwargs['pk']
         #implementing binary search to find the specific room
@@ -346,25 +339,25 @@ class RoomBookView(APIView):
         room = rooms[index]
 
         #change isFree to False, and add exp_date
-        serializer = RoomSerializer(room, data={
-            "room_type": room.room_type,
-            "room_name": room.room_name,
-            "room_num": room.room_num,
-            "price": room.price,
-            "min_person": room.min_person,
-            "max_person": room.max_person,
-            "detail": room.detail,
-            "pic1": room.pic1,
-            "pic2": room.pic2,
-            "pic3": room.pic3,
-            "isFree": False,
-            "exp_date": exp_date
-        })
-        if(serializer.is_valid(raise_exception=True)):
-            serializer.save()
-            print(serializer.data)
+        if(room.isFree):
+            room.isFree = False
+            room.from_date = from_date
+            room.exp_date = exp_date
+            room.save()
+        else:
+            return Response({"message": "Room not available"}, status=400)
 
-        return Response(serializer.data, status=202)
+        room_booked_str = user.room_booked
+        room_booked_lst = strToList(room_booked_str)
+        room_booked_lst.append(room.id)
+        room_booked_str = listToStr(room_booked_lst)
+
+        user.room_booked = room_booked_str
+        user.save()
+        #debug
+        print(f'user : {user.id} have booked room number : {user.room_booked}')
+
+        return Response({"message": "Booking Completed"}, status=202)
 
 
 # api/room/check/date/
@@ -378,7 +371,7 @@ class RoomCheckDate(APIView):
             payload = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Unauthenticated!')
-        user = User.objects.filter(id=payload['user_id']).first()
+        # user = User.objects.filter(id=payload['user_id']).first()
 
         rooms = Room.objects.all()
         # serializer = RoomSerializer(rooms, many=True)
@@ -390,23 +383,29 @@ class RoomCheckDate(APIView):
                 #check if the room is available
                 if(now > exp_date):
                     #change isFree to True, exp_date to None
-                    serial = RoomSerializer(room, data={
-                        "room_type": room.room_type,
-                        "room_name": room.room_name,
-                        "room_num": room.room_num,
-                        "price": room.price,
-                        "min_person": room.min_person,
-                        "max_person": room.max_person,
-                        "detail": room.detail,
-                        "pic1": room.pic1,
-                        "pic2": room.pic2,
-                        "pic3": room.pic3,
-                        "isFree": True,
-                        "exp_date": None
-                    })
-                    if(serial.is_valid(raise_exception=True)):
-                        serial.save()
-                    print(room.isFree)
+                    room.isFree = True
+                    room.exp_date = None
+                    room.from_date = None
+                    room.save()
+                    #debug
+                    print(f'room number : {room.id} is now available.')
+
+        users = User.objects.all()
+
+        for user in users:
+            room_booked_str = user.room_booked
+            room_booked_lst = strToList(room_booked_str)
+            temp = [x for x in room_booked_lst]
+
+            for room_id in temp:
+                r = Room.objects.get(pk=room_id)
+                if(r.isFree):
+                    room_booked_lst.remove(room_id)
+
+            room_booked_str = listToStr(room_booked_lst)
+
+            user.room_booked = room_booked_str
+            user.save()
 
         return Response({"message": "success"}, status=200)
 
@@ -425,3 +424,16 @@ def updateRoomType(roomType, room_free):
     })
     if(serializer.is_valid(raise_exception=True)):
        serializer.save()
+
+def listToStr(lst):
+    s = ''
+    for i in range(len(lst)):
+        s += str(lst[i])
+        if(i != len(lst) - 1):
+            s += ', '
+    return s
+
+def strToList(s):
+    if(len(s) == 0):
+        return [] 
+    return [int(x) for x in s.split(',')]
