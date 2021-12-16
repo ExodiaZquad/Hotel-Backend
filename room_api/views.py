@@ -173,12 +173,12 @@ class RoomDetailView(APIView):
         user = User.objects.filter(id=payload['user_id']).first()
         pk = self.kwargs['pk']
         #implementing binary search to find the specific room
-        rooms = Room.objects.all()
-        index = binarySearch(rooms, 0, len(rooms)-1, pk)
-        if(index == -1):
-            return Response({"message": "room not found"}, status=404)
-        room = rooms[index]
-        # room = Room.objects.filter(id=pk).first()
+        # rooms = Room.objects.all()
+        # index = binarySearch(rooms, 0, len(rooms)-1, pk)
+        # if(index == -1):
+        #     return Response({"message": "room not found"}, status=404)
+        # room = rooms[index]
+        room = Room.objects.filter(id=pk).first()
 
         ret = getThreeRoomFromDifferentType(room)
 

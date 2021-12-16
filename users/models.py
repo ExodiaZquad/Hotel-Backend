@@ -80,7 +80,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) # a admin user; non super-user
     admin = models.BooleanField(default=False) # a superuser
-    room_booked = models.CharField(validators=[int_list_validator], max_length=100)
+    room_booked = models.CharField(validators=[int_list_validator], max_length=100, null=True, blank=True)
 
     # notice the absence of a "Password field", that is built in.
     objects = UserManager()
