@@ -193,6 +193,7 @@ SIMPLE_JWT = {
 # can change the frontend website overhere
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://exodiahotel.netlify.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
