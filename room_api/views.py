@@ -91,23 +91,20 @@ def selectionSort(arr):
 
 #binary search using in api/room/<int:pk>/
 def binarySearch(arr, l, r, pk):
-    # Check base case
-    if r >= l:
-        mid = l + (r - l) // 2
-        # If element is present at the middle itself
+    while l <= r:
+        mid = l + (r - l) // 2;
+        # Check if x is present at mid
         if arr[mid].id == pk:
             return mid
-        # If element is smaller than mid, then it
-        # can only be present in left subarray
-        elif arr[mid].id > pk:
-            return binarySearch(arr, l, mid-1, pk)
-        # Else the element can only be present
-        # in right subarray
+        # If x is greater, ignore left half
+        elif arr[mid].id < pk:
+            l = mid + 1
+        # If x is smaller, ignore right half
         else:
-            return binarySearch(arr, mid + 1, r, pk)
-    else:
-        # Element is not present in the array
-        return -1
+            r = mid - 1
+    # If we reach here, then the element
+    # was not present
+    return -1
 
 def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
@@ -173,12 +170,14 @@ class RoomDetailView(APIView):
         user = User.objects.filter(id=payload['user_id']).first()
         pk = self.kwargs['pk']
         #implementing binary search to find the specific room
-        # rooms = Room.objects.all()
-        # index = binarySearch(rooms, 0, len(rooms)-1, pk)
-        # if(index == -1):
-        #     return Response({"message": "room not found"}, status=404)
-        # room = rooms[index]
-        room = Room.objects.filter(id=pk).first()
+        query_set = Room.objects.all()
+        rooms = [room for room in query_set]
+        rooms = sorted(rooms, key=lambda item: item.id)
+        #before do binarySearch the list need to be sorted first
+        index = binarySearch(rooms, 0, len(rooms)-1, pk)
+        if(index == -1):
+            return Response({"message": "room not found"}, status=404)
+        room = rooms[index]
 
         ret = getThreeRoomFromDifferentType(room)
 
@@ -332,7 +331,10 @@ class RoomBookView(APIView):
 
         pk = self.kwargs['pk']
         #implementing binary search to find the specific room
-        rooms = Room.objects.all()
+        query_set = Room.objects.all()
+        rooms = [room for room in query_set]
+        rooms = sorted(rooms, key=lambda item: item.id)
+        #before do binarySearch the list need to be sorted first
         index = binarySearch(rooms, 0, len(rooms)-1, pk)
         if(index == -1):
             return Response({"message": "room not found"}, status=404)
