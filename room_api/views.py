@@ -284,7 +284,7 @@ class RoomSortView(APIView):
                     freeRoom.append(room)
             # using different sorting algorithm for different key
             if(key == "room_num"):
-                arr = insertionSort(freeRoom)
+                freeRoom = insertionSort(freeRoom)
             elif(key == "min_person"):
                 selectionSort(freeRoom)
             elif(key == "price"):
@@ -301,21 +301,23 @@ class RoomSortView(APIView):
                     bookedRoom.append(room)
                 if(room.isFree == True):
                     freeRoom.append(room)
+
             #sort freeRoom
             if(key == "room_num"):
-                arr = insertionSort(freeRoom)
+                freeRoom = insertionSort(freeRoom)
             elif(key == "min_person"):
                 selectionSort(freeRoom)
             elif(key == "price"):
                 bubbleSort(freeRoom)
 
             #sort bookedRoom
-            if(key == "room_num"):
-                arr = insertionSort(bookedRoom)
-            elif(key == "min_person"):
-                selectionSort(bookedRoom)
-            elif(key == "price"):
-                bubbleSort(bookedRoom)
+            if(len(bookedRoom) != 0):
+                if(key == "room_num"):
+                    bookedRoom = insertionSort(bookedRoom)
+                elif(key == "min_person"):
+                    selectionSort(bookedRoom)
+                elif(key == "price"):
+                    bubbleSort(bookedRoom)
 
             #after sorted
             rooms.extend(freeRoom + bookedRoom)
