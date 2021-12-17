@@ -117,6 +117,7 @@ def getThreeRoomFromDifferentType(room):
     for i in range(1,5):
         if(roomType != i):
             lst = findRoomByRoomType(i)
+            lst = [room for room in lst if room.isFree]
             ret.append(lst[random.randint(0, len(lst)-1)])
     return ret
 
