@@ -436,6 +436,8 @@ def listToStr(lst):
     return s
 
 def strToList(s):
-    if(len(s) == 0):
-        return [] 
-    return [int(x) for x in s.split(',')]
+    if(s):
+        if(len(s) == 0):
+            return [] 
+        return [int(x) for x in s.split(',')]
+    return []
