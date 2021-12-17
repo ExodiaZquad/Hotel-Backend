@@ -108,6 +108,7 @@ def binarySearch(arr, l, r, pk):
 
 def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
+    rooms = sorted(rooms, key=lambda item: item.id)
     ret = []
     for room in rooms:
         if(room.room_type == roomType):
@@ -291,7 +292,6 @@ class RoomSortView(APIView):
 
         serializer = RoomSerializer(rooms, many=True)
         arr = [x for x in serializer.data]
-        # print(arr)
         
         # using different sorting algorithm for different key
         if(key == "room_num"):
