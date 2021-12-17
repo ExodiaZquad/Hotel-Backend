@@ -13,14 +13,10 @@ import jwt, random, datetime, pytz
 
 
 #implementing sorting algorithm
-def bubbleSort(arr, **kwargs):
-    method = kwargs['method']
+def bubbleSort(arr):
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
-            if(method == "isFree"):
-                if(arr[i][method] < arr[j][method]):
-                    arr[i], arr[j] = arr[j], arr[i]
-            elif(arr[i][method] > arr[j][method]):
+            if(arr[i].price > arr[j].price):
                 arr[i], arr[j] = arr[j], arr[i]
 
 #quick sort
@@ -70,7 +66,7 @@ def insertionSort(arr):
     while lists:
         poppy = lists.pop(0)
         for i in range(len(sortedList) - 1, -1, -1):
-            if poppy['room_num'] > sortedList[i]['room_num']:
+            if poppy.room_num > sortedList[i].room_num:
                 sortedList.insert(i+1, poppy)
                 break
             if i == 0:
@@ -84,7 +80,7 @@ def selectionSort(arr):
     for i in range(len(arr)):
         min_idx = i
         for j in range(i+1, len(arr)):
-            if arr[min_idx]["min_person"] > arr[j]["min_person"]:
+            if arr[min_idx].min_person > arr[j].min_person:
                 min_idx = j
     arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
@@ -282,28 +278,52 @@ class RoomSortView(APIView):
         #if key == isFree need to search
         rooms = []
         if(isFree == '1'):
+            freeRoom = []
             for room in ret:
                 if(room.isFree == True):
-                    rooms.append(room)
+                    freeRoom.append(room)
+            # using different sorting algorithm for different key
+            if(key == "room_num"):
+                arr = insertionSort(freeRoom)
+            elif(key == "min_person"):
+                selectionSort(freeRoom)
+            elif(key == "price"):
+                bubbleSort(freeRoom)
+            
+            #after sorted
+            rooms.extend(freeRoom)
         else:
+            #bug: when the rooms isFree == false is Null <- need to refactor the sorting code.
+            freeRoom = []
+            bookedRoom = []
             for room in ret:
                 if(room.isFree == False):
-                    rooms.append(room)
+                    bookedRoom.append(room)
+                if(room.isFree == True):
+                    freeRoom.append(room)
+            #sort freeRoom
+            if(key == "room_num"):
+                arr = insertionSort(freeRoom)
+            elif(key == "min_person"):
+                selectionSort(freeRoom)
+            elif(key == "price"):
+                bubbleSort(freeRoom)
+
+            #sort bookedRoom
+            if(key == "room_num"):
+                arr = insertionSort(bookedRoom)
+            elif(key == "min_person"):
+                selectionSort(bookedRoom)
+            elif(key == "price"):
+                bubbleSort(bookedRoom)
+
+            #after sorted
+            rooms.extend(freeRoom + bookedRoom)
 
         serializer = RoomSerializer(rooms, many=True)
-        arr = [x for x in serializer.data]
-        
-        # using different sorting algorithm for different key
-        if(key == "room_num"):
-            arr = insertionSort(arr)
-        elif(key == "min_person"):
-            selectionSort(arr)
-        elif(key == "price"):
-            bubbleSort(arr, method="price")
-            # heapSort(arr)
 
         # bubbleSort(arr, method=key)
-        return Response(data=arr)
+        return Response(data=serializer.data)
 
 # api/room/book/<int:pk>/
 class RoomBookView(APIView):
