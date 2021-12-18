@@ -43,8 +43,17 @@ class UserDetailView(APIView):
         room_booked_lst = strToList(room_booked_str)
         for room_id in room_booked_lst:
             room = Room.objects.get(pk=room_id)
-            room_serializer = RoomSerializer(room)
-            ret.append(room_serializer.data)
+            # room_serializer = RoomSerializer(room)
+            ret.append(room)
+
+        #sort(bubble sort) room by exp_date (sooner to later)
+        for i in range(1,len(ret)):
+            for j in range(i+1, len(ret)):
+                if(ret[i].exp_date > ret[j].exp_date):
+                    ret[i], ret[j] = ret[j], ret[i]
+
+        for i in range(1, len(ret)):
+            ret[i] = RoomSerializer(ret[i]).data
 
         return Response(ret, status=200)
 
