@@ -7,6 +7,7 @@ from .serializers import RoomSerializer, RoomTypeSerializer
 from users.serializers import UserSerializer
 from users.models import User
 from core.settings import SECRET_KEY
+from .tree import Tree
 import jwt, random, datetime, pytz
 
 #implementing Tree
@@ -169,13 +170,21 @@ class RoomDetailView(APIView):
         pk = self.kwargs['pk']
         #implementing binary search to find the specific room
         query_set = Room.objects.all()
+
+        #implementing binary search tree
+        tree = Tree()
+        tree = tree.list_to_bst(sorted(query_set, key=lambda item : item.id))
+        # tree.printTree(tree)
+        # print(tree.search(tree, pk))
+
         rooms = [room for room in query_set]
         rooms = sorted(rooms, key=lambda item: item.id)
         #before do binarySearch the list need to be sorted first
         index = binarySearch(rooms, 0, len(rooms)-1, pk)
         if(index == -1):
             return Response({"message": "room not found"}, status=404)
-        room = rooms[index]
+        # room = rooms[index]
+        room = tree.search(tree, pk)
 
         ret = getThreeRoomFromDifferentType(room)
 
@@ -355,13 +364,18 @@ class RoomBookView(APIView):
         pk = self.kwargs['pk']
         #implementing binary search to find the specific room
         query_set = Room.objects.all()
+
+        tree = Tree()
+        tree = tree.list_to_bst(sorted(query_set, key=lambda item : item.id))
+
         rooms = [room for room in query_set]
         rooms = sorted(rooms, key=lambda item: item.id)
         #before do binarySearch the list need to be sorted first
         index = binarySearch(rooms, 0, len(rooms)-1, pk)
         if(index == -1):
             return Response({"message": "room not found"}, status=404)
-        room = rooms[index]
+        # room = rooms[index]
+        room = tree.search(tree, pk)
 
         #change isFree to False, and add exp_date
         if(room.isFree):
