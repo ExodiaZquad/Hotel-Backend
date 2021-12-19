@@ -1,3 +1,5 @@
+from .Stack import Stack
+
 class Tree:
     def __init__(self, x=None):
         self.val = x
@@ -6,15 +8,15 @@ class Tree:
         self.room = None
 
     def search(self, root, data):
-        s = [root]
-        while(len(s) != 0):
+        s = Stack([root])
+        while(s.size() != 0):
             curr = s.pop()
             if(data < curr.val.id):
-                s.append(curr.left)
+                s.push(curr.left)
                 if(curr.left is None):
                     return curr.val
             elif(data > curr.val.id):
-                s.append(curr.right)
+                s.push(curr.right)
                 if(curr.right is None):
                     return curr.val
             else:

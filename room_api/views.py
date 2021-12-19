@@ -66,10 +66,10 @@ def heapSort(arr):
 
 #insertion sort for sorting by room_num
 def insertionSort(arr):
-    lists = [x for x in arr]
-    sortedList = [lists.pop(0)]
-    while lists:
-        poppy = lists.pop(0)
+    q = Queue([x for x in arr])
+    sortedList = [q.deQueue()]
+    while not q.isEmpty():
+        poppy = q.deQueue()
         for i in range(len(sortedList) - 1, -1, -1):
             if poppy.room_num > sortedList[i].room_num:
                 sortedList.insert(i+1, poppy)
@@ -420,6 +420,7 @@ class RoomCheckDate(APIView):
         rooms = Room.objects.all()
         # serializer = RoomSerializer(rooms, many=True)
         utc = pytz.UTC
+        #linear search
         for room in rooms:
             now = datetime.datetime.now().replace(tzinfo=utc)
             exp_date = room.exp_date
@@ -436,6 +437,7 @@ class RoomCheckDate(APIView):
 
         users = User.objects.all()
 
+        #linear search
         for user in users:
             room_booked_str = user.room_booked
             room_booked_lst = strToList(room_booked_str)
