@@ -426,7 +426,7 @@ class RoomCheckDate(APIView):
             exp_date = room.exp_date
             if(exp_date):
                 #check if the room is available (now_date should be one day more than the expdate to be expired)
-                if(now > (exp_date + datetime.timedelta(days=1))):
+                if(now >= (exp_date + datetime.timedelta(days=1))):
                     #change isFree to True, exp_date to None
                     room.isFree = True
                     room.exp_date = None
