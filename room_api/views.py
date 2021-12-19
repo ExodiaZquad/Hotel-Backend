@@ -8,12 +8,16 @@ from users.serializers import UserSerializer
 from users.models import User
 from core.settings import SECRET_KEY
 from .tree import Tree
+from .Queue import Queue
+from .Stack import Stack
 import jwt, random, datetime, pytz
 
 #implementing Tree
 
 
 #implementing sorting algorithm
+
+#bubble sort for price
 def bubbleSort(arr):
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
@@ -107,6 +111,7 @@ def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
     rooms = sorted(rooms, key=lambda item: item.id)
     ret = []
+    #linear search
     for room in rooms:
         if(room.room_type == roomType):
             ret.append(room)
@@ -419,8 +424,8 @@ class RoomCheckDate(APIView):
             now = datetime.datetime.now().replace(tzinfo=utc)
             exp_date = room.exp_date
             if(exp_date):
-                #check if the room is available
-                if(now > exp_date):
+                #check if the room is available (now_date should be one day more than the expdate to be expired)
+                if(now > (exp_date + datetime.timedelta(days=1))):
                     #change isFree to True, exp_date to None
                     room.isFree = True
                     room.exp_date = None

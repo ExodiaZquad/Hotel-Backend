@@ -971,8 +971,8 @@
     "pic3": "Sukumvit3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 10,
-    "maxPerson": 11
+    "min_person": 10,
+    "max_person": 11
   },
   {
     "id": 62,
@@ -986,8 +986,8 @@
     "pic3": "Sukumvit3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 10,
-    "maxPerson": 11
+    "min_person": 10,
+    "max_person": 11
   },
   {
     "id": 63,
@@ -1001,8 +1001,8 @@
     "pic3": "Sukumvit3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 10,
-    "maxPerson": 11
+    "min_person": 10,
+    "max_person": 11
   },
   {
     "id": 64,
@@ -1016,8 +1016,8 @@
     "pic3": "Sukumvit3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 10,
-    "maxPerson": 11
+    "min_person": 10,
+    "max_person": 11
   },
   {
     "id": 65,
@@ -1031,8 +1031,8 @@
     "pic3": "Rook home3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 16,
-    "maxPerson": 18
+    "min_person": 16,
+    "max_person": 18
   },
   {
     "id": 66,
@@ -1046,8 +1046,8 @@
     "pic3": "Rook home3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 16,
-    "maxPerson": 18
+    "min_person": 16,
+    "max_person": 18
   },
   {
     "id": 67,
@@ -1061,8 +1061,8 @@
     "pic3": "Pudtan3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 4,
-    "maxPerson": 5
+    "min_person": 4,
+    "max_person": 5
   },
   {
     "id": 68,
@@ -1076,8 +1076,8 @@
     "pic3": "Pudtan3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 4,
-    "maxPerson": 5
+    "min_person": 4,
+    "max_person": 5
   },
   {
     "id": 69,
@@ -1091,8 +1091,8 @@
     "pic3": "Pudtan3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 4,
-    "maxPerson": 5
+    "min_person": 4,
+    "max_person": 5
   },
   {
     "id": 70,
@@ -1106,8 +1106,8 @@
     "pic3": "Pudtan3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 4,
-    "maxPerson": 5
+    "min_person": 4,
+    "max_person": 5
   },
   {
     "id": 71,
@@ -1121,8 +1121,8 @@
     "pic3": "Zircon river3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 18,
-    "maxPerson": 21
+    "min_person": 18,
+    "max_person": 21
   },
   {
     "id": 72,
@@ -1136,7 +1136,7 @@
     "pic3": "Zircon river3.jpg",
     "isFree": true,
     "exp_date": null,
-    "minPerson": 18,
-    "maxPerson": 21
+    "min_person": 18,
+    "max_person": 21
   }
 ]
