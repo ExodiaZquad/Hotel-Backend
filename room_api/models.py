@@ -21,9 +21,10 @@ class Room(models.Model):
     min_person = models.IntegerField()
     max_person = models.IntegerField()
     detail = models.TextField(blank=True)
-    pic1 = models.URLField()
-    pic2 = models.URLField()
-    pic3 = models.URLField()
+    #Change these to CharField
+    pic1 = models.CharField(max_length=100)
+    pic2 = models.CharField(max_length=100)
+    pic3 = models.CharField(max_length=100)
     isFree = models.BooleanField(default=True)
     # exp_date = models.DurationField(blank=True, null=True)
     from_date = models.DateTimeField(blank=True, null=True)
