@@ -1,6 +1,6 @@
 # Hotel-Backend
 
-Backend for Hotel web application. Developed using django-rest-framework for Data Structure and Algorithms project.
+Backend for Hotel web application. Developed using django-rest-framework for Data Structure and Algorithms project. Deployed to Heroku and using MongoDB as our main database.
 
 ## Quickstart
 
@@ -53,11 +53,17 @@ py manage.py runserver
    Methods allowed : GET, PUT, DELETE
 - `api/roomtype/` listing the room typesand create  
    Methods allowed : GET, PUT, POST
-- `api/roomtype/<int:pk>` update the specified room type  
+- `api/roomtype/<int:pk>/` update the specified room type  
    Methods allowed : PUT
 - `api/room/sort/` listing all the room after sorted in the specified method  
    Methods allowed : GET
 - `api/register/` registrations api (username and password needed)  
    Methods allowed : POST
 - `api/user/` getting user information by using jwt token as Authentication  
+   Methods allowed : GET
+- `api/token` getting authentication  
+   Methods allowed : POST
+- `api/room/book/<int:pk>/` perform booking action to the room  
+   Methods allowed : POST
+- `api/room/check/date/` update all rooms by check today date to the exp_date  
    Methods allowed : GET
