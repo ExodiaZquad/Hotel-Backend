@@ -80,7 +80,7 @@ def insertionSort(arr):
     return sortedList
 
 
-#selection sort for min_person
+#selection sort for sorting min_person
 def selectionSort(arr):
     for i in range(len(arr)):
         min_idx = i
@@ -111,7 +111,7 @@ def findRoomByRoomType(roomType):
     rooms = Room.objects.all()
     rooms = sorted(rooms, key=lambda item: item.id)
     ret = []
-    #linear search
+    #linear search to find room that match the roomType
     for room in rooms:
         if(room.room_type == roomType):
             ret.append(room)
@@ -176,30 +176,30 @@ class RoomDetailView(APIView):
         #implementing binary search to find the specific room
         query_set = Room.objects.all()
 
-        #implementing binary search tree
+        #implementing binary search tree to do Binary Search
         tree = Tree()
         tree = tree.list_to_bst(sorted(query_set, key=lambda item : item.id))
-        # tree.printTree(tree)
-        # print(tree.search(tree, pk))
 
         rooms = [room for room in query_set]
         rooms = sorted(rooms, key=lambda item: item.id)
         #before do binarySearch the list need to be sorted first
         index = binarySearch(rooms, 0, len(rooms)-1, pk)
+        #check if room not found
         if(index == -1):
             return Response({"message": "room not found"}, status=404)
         # room = rooms[index]
+        #binary search
         room = tree.search(tree, pk)
 
         ret = getThreeRoomFromDifferentType(room)
 
-        #implement bubble sort here to sort the price of the random three room
+        #bubble sort to sort random three rooms by price
         for i in range(len(ret)):
             for j in range(i+1, len(ret)):
                 if(ret[i].price > ret[j].price):
                     ret[i], ret[j] = ret[j], ret[i]
 
-        #insert the room to the first index
+        #insert the wanted room to the first index
         ret.insert(0, room)
 
         serializer = RoomSerializer(ret, many=True)
@@ -294,6 +294,7 @@ class RoomSortView(APIView):
         rooms = []
         if(isFree == '1'):
             freeRoom = []
+            #linear search to find the room that match conditions
             for room in ret:
                 if(room.isFree == True):
                     freeRoom.append(room)
@@ -308,9 +309,9 @@ class RoomSortView(APIView):
             #after sorted
             rooms.extend(freeRoom)
         else:
-            #bug: when the rooms isFree == false is Null <- need to refactor the sorting code.
             freeRoom = []
             bookedRoom = []
+            #linear search to find the room that match conditions
             for room in ret:
                 if(room.isFree == False):
                     bookedRoom.append(room)
@@ -380,6 +381,8 @@ class RoomBookView(APIView):
         if(index == -1):
             return Response({"message": "room not found"}, status=404)
         # room = rooms[index]
+
+        #binary search
         room = tree.search(tree, pk)
 
         #change isFree to False, and add exp_date
@@ -391,6 +394,7 @@ class RoomBookView(APIView):
         else:
             return Response({"message": "Room not available"}, status=400)
 
+        #update room_booked in user that booked the room
         room_booked_str = user.room_booked
         room_booked_lst = strToList(room_booked_str)
         room_booked_lst.append(room.id)
@@ -398,6 +402,7 @@ class RoomBookView(APIView):
 
         user.room_booked = room_booked_str
         user.save()
+
         #debug
         print(f'user : {user.id} have booked room number : {user.room_booked}')
 
@@ -437,7 +442,7 @@ class RoomCheckDate(APIView):
 
         users = User.objects.all()
 
-        #linear search
+        #linear search to update user that have the expired room
         for user in users:
             room_booked_str = user.room_booked
             room_booked_lst = strToList(room_booked_str)
